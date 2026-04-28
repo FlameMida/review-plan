@@ -1,0 +1,36 @@
+{
+  "name": "review-plan",
+  "version": "0.1.0",
+  "description": "Review documents and development plans with codebase context, Exa research, approval-gated edits, and traceable execution planning.",
+  "author": {
+    "name": "Maverick"
+  },
+  "license": "MIT",
+  "keywords": [
+    "review-plan",
+    "planning",
+    "document-review",
+    "codebase-review",
+    "execution-plan",
+    "exa"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "计划审查",
+    "shortDescription": "审查开发计划并生成可追踪执行方案",
+    "longDescription": "结合项目代码、文档和 Exa MCP 最新调研审查文档或开发计划；先输出不足和建议，等待确认后再修改或拆分为带进度、证据、中文提交和上下文交接的执行计划。",
+    "developerName": "Maverick",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "审查这个开发计划并结合项目现状给出改进建议。",
+      "把确认后的计划拆分为可追踪执行计划。"
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}
