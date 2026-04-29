@@ -1,7 +1,7 @@
 interface:
   display_name: "计划审查"
-  short_description: "Research-backed plan review and execution tracking"
-  default_prompt: "Use $review-plan to review this development plan against the current project, research relevant context, and ask me before editing or splitting it."
+  short_description: "Research-backed graded plan review and harness execution tracking"
+  default_prompt: "Use $review-plan to read this plan, research current context with Exa MCP, inspect related project code, produce graded findings with concrete fixes, wait for my fix/skip feedback, then split the plan into harness-accepted execution steps when approved."
 
 dependencies:
   tools:

@@ -1,7 +1,7 @@
 {
   "name": "review-plan",
   "version": "0.1.0",
-  "description": "Review documents and development plans with codebase context, Exa research, approval-gated edits, and traceable execution planning.",
+  "description": "Review documents and development plans with Exa research, project-code context, graded findings, interactive fix/skip feedback, and traceable harness-based execution planning.",
   "author": {
     "name": "Maverick"
   },
@@ -17,8 +17,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "计划审查",
-    "shortDescription": "审查开发计划并生成可追踪执行方案",
-    "longDescription": "结合项目代码、文档和 Exa MCP 最新调研审查文档或开发计划；先输出不足和建议，等待确认后再修改或拆分为带进度、证据、中文提交和上下文交接的执行计划。",
+    "shortDescription": "审查计划并拆分为可验收执行方案",
+    "longDescription": "按顺序读取文档或开发计划，使用 Exa MCP 做最新调研，结合项目代码输出分级审查结果与修改建议；等待用户选择修正或放弃修正后，提醒并拆分为带子目录、进度追溯、harness 验收、中文提交和上下文交接的自动执行计划。",
     "developerName": "Maverick",
     "category": "Productivity",
     "capabilities": [
@@ -27,8 +27,8 @@
       "Write"
     ],
     "defaultPrompt": [
-      "审查这个开发计划并结合项目现状给出改进建议。",
-      "把确认后的计划拆分为可追踪执行计划。"
+      "审查这个开发计划：先读文档，再用 Exa MCP 调研，结合项目代码输出分级审查结果和修改建议。",
+      "在我选择修正或放弃修正后，把计划拆分为包含 harness 验收、进度追溯、中文提交和上下文交接的可执行计划。"
     ],
     "brandColor": "#2563EB",
     "screenshots": []

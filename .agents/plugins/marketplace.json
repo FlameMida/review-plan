@@ -1,7 +1,7 @@
 {
   "name": "review-plan",
   "interface": {
-    "displayName": "Review Plan"
+    "displayName": "计划审查"
   },
   "plugins": [
     {

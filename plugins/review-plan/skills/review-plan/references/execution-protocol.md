@@ -1,6 +1,16 @@
 # Execution Protocol
 
-Use this reference only after the user explicitly confirms that the reviewed document or development plan should be split into a detailed execution plan or executed.
+Use this reference only after the user explicitly confirms that the reviewed document or development plan should be split into a detailed execution plan or executed. Load `references/harness.md` when creating parent or step harness files.
+
+## Split Preconditions
+
+Before creating plan files, confirm one of these is true:
+
+- the user approved splitting after reviewing the findings;
+- the original request explicitly required splitting after the review-feedback gate;
+- the user approved fixing the artifact and the fixes have already been applied.
+
+If the user chose `放弃修正`, split from the unchanged artifact and record that decision in `decisions.md`.
 
 ## Plan Directory
 
@@ -14,16 +24,19 @@ plans/<yyyymmdd>-<short-slug>/
   research.md
   commits.md
   handoff.md
+  harness.md
   steps/
     001-<step-slug>/
       plan.md
       progress.md
       evidence.md
+      harness.md
       handoff.md
     002-<step-slug>/
       plan.md
       progress.md
       evidence.md
+      harness.md
       handoff.md
 ```
 
@@ -37,6 +50,7 @@ If the repository already has a planning convention, follow it and preserve the 
 - `research.md`: Exa sources, project files inspected, and important inferences.
 - `commits.md`: commit hashes, messages, step mapping, and verification summary.
 - `handoff.md`: current state and the exact next step to load after context is cleared.
+- `harness.md`: global acceptance protocol, required validation commands, retry rules, and what counts as a blocker.
 
 ## Step Files
 
@@ -48,6 +62,7 @@ Each `steps/<id>-<slug>/plan.md` should include:
 - implementation tasks;
 - acceptance criteria;
 - validation commands;
+- harness acceptance checks;
 - rollback or recovery notes when relevant;
 - expected commit message draft.
 
@@ -66,6 +81,14 @@ Each `evidence.md` should record:
 - tests or checks passed/failed;
 - screenshots or manual verification notes when relevant.
 
+Each `harness.md` should define:
+
+- exact automated checks, manual checks, or inspection criteria for the step;
+- pass/fail criteria for every acceptance item;
+- retry loop instructions for failed checks;
+- maximum practical retry scope before marking a true blocker;
+- blocker escalation details: failing command, observed output, suspected cause, and required decision.
+
 Each `handoff.md` should contain the minimal context needed for a fresh session:
 
 - completed step summary;
@@ -81,20 +104,41 @@ Each `handoff.md` should contain the minimal context needed for a fresh session:
 - Make dependencies explicit; do not place prerequisite work in a later step.
 - Avoid steps that mix unrelated modules solely to reduce the number of commits.
 - Include a validation command or manual verification method for every step.
+- Include strict harness acceptance for every step and every feature point.
+- Define what must be fixed if each harness check fails.
+- Ensure every step can produce a self-contained commit.
 - If a step needs a user decision, mark it `blocked` and ask before continuing.
+- When splitting is complete, report `拆分完毕` and list the parent plan directory plus the first step path.
 
 ## Execution Rules
 
-When the user asks to execute the plan:
+When the user asks to execute an approved split plan, continue automatically step by step. Do not ask for next-step confirmation unless a step is blocked by a user decision, unavailable credential, external service approval, or destructive action.
 
-1. Load the parent `README.md`, `progress.md`, `handoff.md`, and the current step's `plan.md`.
+1. Load the parent `README.md`, `progress.md`, `handoff.md`, `harness.md`, and the current step's `plan.md`, `progress.md`, and `harness.md`.
 2. Confirm no blocking decision is open for the current step.
 3. Inspect the worktree with `git status --short`. Preserve unrelated user changes and avoid committing them.
 4. Implement only the current step's scope.
-5. Run the step's validation commands, or state exactly why a validation could not run.
-6. Update the parent and step progress files, evidence files, commit log, and handoff files.
-7. Commit only the current step's relevant changes.
-8. After the commit, clear context before beginning the next step. If no automatic context-clear mechanism exists, stop and instruct the user to start a fresh context with the parent `handoff.md` and next step path.
+5. Run the step's harness checks and validation commands, or state exactly why a validation could not run.
+6. If any harness check fails, fix the step within scope and rerun the failed checks. Continue until all required checks pass or a true blocker is documented.
+7. Update the parent and step progress files, evidence files, commit log, and handoff files.
+8. Commit only the current step's relevant changes.
+9. After the commit, clear context before beginning the next step. If no automatic context-clear mechanism exists, stop and instruct the user to start a fresh context with the parent `handoff.md` and next step path.
+
+## Harness Rules
+
+- A step is not complete until its harness passes or the plan records a true blocker.
+- Harness checks must be specific enough for another agent to rerun them.
+- Prefer existing test, lint, build, typecheck, migration, or smoke-test commands over invented checks.
+- Manual acceptance is allowed only when automation is unavailable; record exact observations or screenshots required.
+- Do not weaken a harness after failure just to pass. Change acceptance criteria only when the artifact's intent was wrong or impossible, and record the decision.
+- If a failure is outside the current step's scope, record it, mark the step blocked or partially accepted as appropriate, and avoid unrelated changes.
+
+## Context-Clear Rules
+
+- After each accepted step commit, write parent and step handoff files before clearing context.
+- The handoff must include the next step path and enough state for a fresh session to continue without rereading the whole conversation.
+- If the runtime has a context-clear or session-restart mechanism, use it before the next step.
+- If the runtime cannot clear context automatically, stop after the commit, state the limitation, and tell the user which `handoff.md` and next step path to start with.
 
 ## Commit Message Rules
 
