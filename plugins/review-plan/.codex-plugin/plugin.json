@@ -1,6 +1,6 @@
 {
   "name": "review-plan",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Review documents and development plans with Exa research, project-code context, graded findings, interactive fix/skip feedback, and traceable harness-based execution planning.",
   "author": {
     "name": "Maverick"
